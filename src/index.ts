@@ -5,7 +5,7 @@ class IndexRoute {
 	public router: Router;
 	constructor() {
 		this.router = Router();
-        this.initializeRoutes()
+		this.initializeRoutes();
 	}
 	initializeRoutes(): void {
 		this.router.get('/', (req, res) => {

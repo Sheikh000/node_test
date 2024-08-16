@@ -10,4 +10,4 @@ const Config: ConfigType = {
 		port: process.env.PORT || 3000,
 	},
 };
-export default Config
+export default Config;
