@@ -3,3 +3,9 @@ export enum USER_ROLE {
 	STAFF = 'staff',
 	ADMIN = 'admin',
 }
+
+export enum DEPARTMENT {
+	CE = 'ce',
+	ME = 'me',
+	EC = 'ec',
+}
