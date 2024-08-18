@@ -17,8 +17,7 @@ const userSchema = new Schema<IUser>({
 	mobileNumber: {
 		type: Number,
 		required: true,
-		min: 10,
-		max: 10,
+		min: 999999999,
 	},
 	department: {
 		type: String,

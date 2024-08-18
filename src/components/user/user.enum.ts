@@ -5,7 +5,7 @@ export enum USER_ROLE {
 }
 
 export enum DEPARTMENT {
-	CE = 'ce',
-	ME = 'me',
-	EC = 'ec',
+	CE = 'CE',
+	ME = 'ME',
+	EC = 'EC',
 }
