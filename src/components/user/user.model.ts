@@ -3,7 +3,8 @@ import { Schema, model, Document } from 'mongoose';
 import { USER_ROLE, DEPARTMENT } from './user.enum';
 interface IUser extends Document {
 	name: string;
-	mobileNumber: number;
+	mobileNumber: string;
+	password:string
 	department: DEPARTMENT;
 	batch?: number;
 	currentSemester?: number;
@@ -13,11 +14,24 @@ const userSchema = new Schema<IUser>({
 	name: {
 		type: String,
 		required: true,
+		trim:true,
 	},
 	mobileNumber: {
-		type: Number,
+		type: String,
 		required: true,
-		min: 999999999,
+		trim:true,
+		validate: {
+			validator: function (value: string) {
+			  return /^[0-9]{10}$/.test(value);
+			},
+			message: "Phone number must be exactly 10 digits long.",
+		  },
+	},
+	password:{
+		type:String,
+		required:true,
+		trim: true,
+		minlength: [6, 'Password must be at least 6 characters long'],
 	},
 	department: {
 		type: String,
@@ -26,9 +40,11 @@ const userSchema = new Schema<IUser>({
 	},
 	batch: {
 		type: Number,
+		required: function() { return this.role === USER_ROLE.STUDENT; },
 	},
 	currentSemester: {
 		type: Number,
+		required: function() { return this.role === USER_ROLE.STUDENT; },
 	},
 	role: {
 		type: String,

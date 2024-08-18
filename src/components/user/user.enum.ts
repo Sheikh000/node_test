@@ -1,3 +1,4 @@
+/**user.enums.ts */
 export enum USER_ROLE {
 	STUDENT = 'student',
 	STAFF = 'staff',

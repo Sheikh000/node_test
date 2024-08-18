@@ -1,3 +1,4 @@
+/**user.Dal.ts */
 import User from './user.model';
 
 export async function CreateNewUser(userBody) {
