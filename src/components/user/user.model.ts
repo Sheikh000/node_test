@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 import { USER_ROLE, DEPARTMENT } from './user.enum';
 interface IUser extends Document {
 	name: string;
+	rollNumber?:string;
 	mobileNumber: string;
 	password:string
 	department: DEPARTMENT;
@@ -15,6 +16,12 @@ const userSchema = new Schema<IUser>({
 		type: String,
 		required: true,
 		trim:true,
+	},
+	rollNumber:{
+		type:String,
+		required:true,
+		trim:true,
+		unique:true
 	},
 	mobileNumber: {
 		type: String,
@@ -52,6 +59,14 @@ const userSchema = new Schema<IUser>({
 		required: true,
 	},
 });
+
+userSchema.pre<IUser>('validate', function (next) {
+	if ((this.role === USER_ROLE.ADMIN || this.role === USER_ROLE.STAFF) && (this.batch || this.currentSemester)) {
+	  this.invalidate('batch', 'No need to provide batch for staff and admin.');
+	  this.invalidate('currentSemester', 'No need to provide current semester for staff and admin.');
+	}
+	next();
+  });
 
 const User = model<IUser>('User', userSchema);
 export default User;
