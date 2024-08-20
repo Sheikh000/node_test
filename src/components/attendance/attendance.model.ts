@@ -4,13 +4,13 @@ import { ISABSENT } from './attendance.enum';
 interface IAttendance extends Document {
 	date: Date;
 	isAbsent: ISABSENT;
-	rollNumber:string
+	rollNumber: string;
 }
 const attendanceSchema = new Schema<IAttendance>({
 	date: {
 		type: Date,
 		required: true,
-		default: Date.now()
+		default: Date.now(),
 	},
 	isAbsent: {
 		type: String,

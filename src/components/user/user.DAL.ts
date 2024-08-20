@@ -9,7 +9,7 @@ export async function CreateNewUser(userBody) {
 	}
 }
 
-export async function GetUserByDetails({ userObj }: any) {
+export async function GetUserByDetails(userObj: any) {
 	try {
 		const user = await User.find({ ...userObj });
 		return user;
