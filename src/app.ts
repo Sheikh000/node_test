@@ -12,7 +12,7 @@ class App {
 	app: express.Application;
 	constructor() {
 		this.app = express();
-		this.app.use(express.json())
+		this.app.use(express.json());
 		this.initializeRoutes();
 		this.connectToDatabase()
 			.then(() => {
