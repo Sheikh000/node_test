@@ -7,6 +7,9 @@ class UserController {
 	async createUser(req, res, next) {
 		try {
 			const { mobileNumber } = req.body;
+			if(!req.user.tokens.length){
+				return res.send({message:"Admin needs to login"})
+			}
 			const existingUser = await User.findOne({ mobileNumber });
 			if (existingUser) {
 				return res.send({ message: 'User already exists' });
@@ -14,9 +17,9 @@ class UserController {
 			const user = await CreateNewUser(req.body);
 			const token = generateToken(user?._id?.toString());
 			await user.addToken(token);
-			return res.status(201).send({ data: user, token });
+			res.status(201).send({ data: user, token });
 		} catch (error) {
-			return res.send(error);
+			res.send(error);
 		}
 	}
 	async logInUser(req, res, next) {
@@ -34,9 +37,9 @@ class UserController {
 			}
 			const token = generateToken(user?._id?.toString());
 			await user.addToken(token);
-			return res.status(200).send({ data: user, token });
+			res.status(200).send({ data: user, token });
 		} catch (e) {
-			return res.send(e);
+			res.send(e);
 		}
 	}
 	async getUsers(req, res, next) {
@@ -46,9 +49,9 @@ class UserController {
 				return res.send({ message: 'Not authorized' });
 			}
 			const users = await User.find();
-			return res.status(200).send({ data: users });
+			res.status(200).send({ data: users });
 		} catch (e) {
-			return res.send(e);
+			res.send(e);
 		}
 	}
 	async deleteUser(req, res, next) {
@@ -62,9 +65,18 @@ class UserController {
 			if (!deletedUser) {
 				return res.send({ message: 'User does not exists' });
 			}
-			return res.send(deletedUser);
+			res.send(deletedUser);
 		} catch (e) {
-			return res.send(e);
+			res.send(e);
+		}
+	}
+	async logOutUser(req, res, next) {
+		try {
+			req.user.tokens = [];
+			await req.user.save();
+			res.send({ data: 'Succesfully logged out' });
+		} catch (e) {
+			res.send(e);
 		}
 	}
 }
