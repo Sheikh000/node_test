@@ -1,5 +1,5 @@
 /**user.controller.ts */
-import { CreateNewUser, GetUserByDetails } from './user.DAL';
+import { CreateNewUser, GetUserByDetails, deleteUser } from './user.DAL';
 import { generateToken } from '../../utils/auth';
 import User from '../user/user.model';
 import { USER_ROLE } from './user.enum';
@@ -47,6 +47,22 @@ class UserController {
 			}
 			const users = await User.find();
 			return res.status(200).send({ data: users });
+		} catch (e) {
+			return res.send(e);
+		}
+	}
+	async deleteUser(req, res, next) {
+		try {
+			const { role } = req.user;
+			const mobileNumber = req.params.mobileNumber;
+			if (role === USER_ROLE.STAFF) {
+				return res.send({ message: 'Only admin can delete User' });
+			}
+			const deletedUser = await deleteUser({ mobileNumber });
+			if (!deletedUser) {
+				return res.send({ message: 'User does not exists' });
+			}
+			return res.send(deletedUser);
 		} catch (e) {
 			return res.send(e);
 		}

@@ -17,3 +17,12 @@ export async function GetUserByDetails(userObj: any) {
 		return e;
 	}
 }
+
+export async function deleteUser(userMobileNumber) {
+	try {
+		const deletedUser = await User.findOneAndDelete(userMobileNumber);
+		return deletedUser;
+	} catch (e) {
+		return e;
+	}
+}

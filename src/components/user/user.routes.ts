@@ -22,6 +22,11 @@ class UsersRoute {
 		);
 		this.router.post('/user/login', this.userController.logInUser);
 		this.router.get('/users', auth, this.userController.getUsers);
+		this.router.delete(
+			'/users/:mobileNumber',
+			auth,
+			this.userController.deleteUser,
+		);
 	}
 }
 
