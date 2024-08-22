@@ -29,6 +29,7 @@ const userSchema = new Schema<IUser>(
 				},
 				message: 'Phone number must be exactly 10 digits long.',
 			},
+			unique: true,
 		},
 		password: {
 			type: String,

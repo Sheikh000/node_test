@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import UserController from './user.controller';
 import auth from '../../utils/auth';
+import role from '../../utils/verifyRole'
 class UsersRoute {
 	public router: Router;
 
@@ -13,16 +14,9 @@ class UsersRoute {
 	}
 
 	initializeRoutes() {
-		this.router.post('/admin/signup', this.userController.createAdmin); //create admin
-		this.router.post('/admin/login', this.userController.logInAdmin); //login admin
-		this.router.post('/staff', auth, this.userController.createStaff); //create staff
-		this.router.post('/staff/login', this.userController.logInStaff); //login staff
-		this.router.post(
-			'/student/signup',
-			auth,
-			this.userController.createStudent,
-		); //create student
-		this.router.get('/user/:role', auth, this.userController.getUser); //get staff or students
+		this.router.post('/user/signup', auth,role, this.userController.createAdmin);
+		this.router.post('/user/login',this.userController.logInUser)
+		// this.router.get("/users",auth,this.userController.getUser)
 	}
 }
 
