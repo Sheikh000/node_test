@@ -4,87 +4,60 @@ import { USER_ROLE, DEPARTMENT } from './user.enum';
 import * as bcrypt from 'bcrypt';
 interface IUser extends Document {
 	name: string;
-	rollNumber?: string;
 	mobileNumber: string;
-	password?: string;
+	password: string;
 	department?: DEPARTMENT;
-	batch?: number;
-	currentSemester?: number;
 	role: USER_ROLE;
 	tokens: { token: string }[];
 	addToken: (token: string) => Promise<void>;
 	comparePassword(password: string): Promise<boolean>;
 }
-const userSchema = new Schema<IUser>({
-	name: {
-		type: String,
-		required: true,
-		trim: true,
-	},
-	rollNumber: {
-		type: String,
-		required: function () {
-			return this.role === USER_ROLE.STUDENT;
+const userSchema = new Schema<IUser>(
+	{
+		name: {
+			type: String,
+			required: true,
+			trim: true,
 		},
-		trim: true,
-		unique: true,
-	},
-	mobileNumber: {
-		type: String,
-		required: true,
-		trim: true,
-		validate: {
-			validator: function (value: string) {
-				return /^[0-9]{10}$/.test(value);
+		mobileNumber: {
+			type: String,
+			required: true,
+			trim: true,
+			validate: {
+				validator: function (value: string) {
+					return /^[0-9]{10}$/.test(value);
+				},
+				message: 'Phone number must be exactly 10 digits long.',
 			},
-			message: 'Phone number must be exactly 10 digits long.',
 		},
-	},
-	password: {
-		type: String,
-		trim: true,
-		minlength: [6, 'Password must be at least 6 characters long'],
-		required: true,
-	},
-	department: {
-		type: String,
-		enum: DEPARTMENT,
-		required: function () {
-			return (
-				this.role === USER_ROLE.STUDENT || this.role === USER_ROLE.STAFF
-			);
+		password: {
+			type: String,
+			trim: true,
+			minlength: [6, 'Password must be at least 6 characters long'],
+			required: true,
 		},
-	},
-	batch: {
-		type: Number,
-		required: function () {
-			return this.role === USER_ROLE.STUDENT;
+		department: {
+			type: String,
+			enum: DEPARTMENT,
+			required: function () {
+				return this.role === USER_ROLE.STAFF;
+			},
 		},
-	},
-	currentSemester: {
-		type: Number,
-		required: function () {
-			return this.role === USER_ROLE.STUDENT;
+		role: {
+			type: String,
+			enum: USER_ROLE,
+			required: true,
 		},
+		tokens: [{ token: { type: String, required: true } }],
 	},
-	role: {
-		type: String,
-		enum: USER_ROLE,
-		required: true,
+	{
+		timestamps: true,
 	},
-	tokens: [{ token: { type: String, required: true } }],
-});
+);
 
 userSchema.pre<IUser>('save', function (next) {
 	if (this.role === USER_ROLE.ADMIN) {
 		this.department = undefined;
-		this.batch = undefined;
-		this.currentSemester = undefined;
-		this.rollNumber = undefined;
-	}
-	if (this.role === USER_ROLE.STAFF) {
-		this.batch = undefined;
-		this.currentSemester = undefined;
 	}
 	next();
 });
