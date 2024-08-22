@@ -2,9 +2,15 @@
 import { CreateNewUser, GetUserByDetails } from './user.DAL';
 import { generateToken } from '../../utils/auth';
 import User from '../user/user.model';
+import { USER_ROLE } from './user.enum';
 class UserController {
-	async createAdmin(req, res, next) {
+	async createUser(req, res, next) {
 		try {
+			const { mobileNumber } = req.body;
+			const existingUser = await User.findOne({ mobileNumber });
+			if (existingUser) {
+				return res.send({ message: 'User already exists' });
+			}
 			const user = await CreateNewUser(req.body);
 			const token = generateToken(user?._id?.toString());
 			await user.addToken(token);
@@ -15,16 +21,14 @@ class UserController {
 	}
 	async logInUser(req, res, next) {
 		try {
-			const {mobileNumber,password}=req.body
+			const { mobileNumber, password } = req.body;
 			const user = await User.findOne({
-				mobileNumber
+				mobileNumber,
 			});
 			if (!user) {
 				return res.status(401).send({ error: 'Invalid credentials' });
 			}
-			const isPasswordValid = await user.comparePassword(
-				password
-			);
+			const isPasswordValid = await user.comparePassword(password);
 			if (!isPasswordValid) {
 				return res.status(401).send({ error: 'Invalid credentials' });
 			}
@@ -35,28 +39,17 @@ class UserController {
 			return res.send(e);
 		}
 	}
-	// async getUser(req, res, next) {
-	// 	try {
-	// 		const loggedInUserrole = req.user.role;
-	// 		const role = req.params.role;
-	// 		if (
-	// 			(loggedInUserrole === 'staff' && role === 'staff') ||
-	// 			(loggedInUserrole === 'staff' && role === 'admin')
-	// 		) {
-	// 			return res.send({
-	// 				message: 'Not authorized to view staff or admin',
-	// 			});
-	// 		}
-	// 		if (loggedInUserrole === 'student') {
-	// 			return res.send({
-	// 				message: 'Not authorized to view staff or admin',
-	// 			});
-	// 		}
-	// 		const user = await GetUserByDetails({ role });
-	// 		return res.send(user);
-	// 	} catch (e) {
-	// 		return res.send(e);
-	// 	}
-	// }
+	async getUsers(req, res, next) {
+		try {
+			const { role } = req.user;
+			if (role === USER_ROLE.STAFF) {
+				return res.send({ message: 'Not authorized' });
+			}
+			const users = await User.find();
+			return res.status(200).send({ data: users });
+		} catch (e) {
+			return res.send(e);
+		}
+	}
 }
 export default UserController;
