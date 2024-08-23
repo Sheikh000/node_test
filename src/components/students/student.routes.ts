@@ -20,6 +20,7 @@ class StudentRoute {
 			// role,
 			this.studentController.createStudent,
 		);
+        this.router.get('/student',this.studentController.getStudents)
 	}
 }
 
