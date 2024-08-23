@@ -20,8 +20,12 @@ class StudentRoute {
 			// role,
 			this.studentController.createStudent,
 		);
-		this.router.get('/student',auth, this.studentController.getStudents);
-		this.router.delete('/student/:rollNumber',auth,this.studentController.deleteStudent)
+		this.router.get('/student', auth, this.studentController.getStudents);
+		this.router.delete(
+			'/student/:rollNumber',
+			auth,
+			this.studentController.deleteStudent,
+		);
 	}
 }
 

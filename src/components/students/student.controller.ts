@@ -18,8 +18,8 @@ class StudentController {
 	async getStudents(req, res, next) {
 		try {
 			const students = await getStudentBydetail({});
-			if(!students){
-				return res.send({message:"No students exists"})
+			if (!students) {
+				return res.send({ message: 'No students exists' });
 			}
 			res.status(200).send(students);
 		} catch (e) {
@@ -30,8 +30,8 @@ class StudentController {
 		try {
 			const { rollNumber } = req.params.rollNumber;
 			const deletedStudent = await deleteStudent(rollNumber);
-			if(!deletedStudent){
-				return res.send({message:"Student does not exists"})
+			if (!deletedStudent) {
+				return res.send({ message: 'Student does not exists' });
 			}
 			res.send(deletedStudent);
 		} catch (e) {
