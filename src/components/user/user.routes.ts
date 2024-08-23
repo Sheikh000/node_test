@@ -27,7 +27,7 @@ class UsersRoute {
 			auth,
 			this.userController.deleteUser,
 		);
-		this.router.post('/user/logOut',auth, this.userController.logOutUser);
+		this.router.post('/user/logOut', auth, this.userController.logOutUser);
 	}
 }
 

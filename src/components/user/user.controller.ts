@@ -7,9 +7,6 @@ class UserController {
 	async createUser(req, res, next) {
 		try {
 			const { mobileNumber } = req.body;
-			if(!req.user.tokens.length){
-				return res.send({message:"Admin needs to login"})
-			}
 			const existingUser = await User.findOne({ mobileNumber });
 			if (existingUser) {
 				return res.send({ message: 'User already exists' });
