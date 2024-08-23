@@ -16,3 +16,13 @@ export async function getStudentBydetail(obj: any) {
 		return e;
 	}
 }
+
+export async function deleteStudent(studentRollNumber) {
+	try {
+		const deletedStudent =
+			await Student.findOneAndDelete(studentRollNumber);
+		return deletedStudent;
+	} catch (e) {
+		return e;
+	}
+}
