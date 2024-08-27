@@ -1,12 +1,15 @@
+/**verify role */
 import User from '../components/user/user.model';
 import { USER_ROLE } from '../components/user/user.enum';
 const role = async (req, res, next) => {
 	try {
 		const { role: newUserRole } = req.body;
 		if (!req.user) {
-			const count = await User.countDocuments({ role: 'admin' });
-			if (count) {
-				return res.send({ message: 'Admin already exists' });
+			const adminExists = await User.exists({ role: USER_ROLE.ADMIN });
+			if (adminExists) {
+				return res
+					.status(400)
+					.send({ message: 'Admin already exists' });
 			}
 			next();
 		} else {

@@ -1,4 +1,4 @@
-/**user.routes.ts */
+/**student.routes.ts */
 import { Router } from 'express';
 import StudentController from './student.controller';
 import auth from '../../utils/auth';

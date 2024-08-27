@@ -1,4 +1,4 @@
-/**user.controller.ts */
+/**student.controller.ts */
 import User from '../user/user.model';
 import Student from './student.model';
 import {

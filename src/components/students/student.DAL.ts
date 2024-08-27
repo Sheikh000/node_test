@@ -1,4 +1,4 @@
-/**user.Dal.ts */
+/**student.Dal.ts */
 import Student from './student.model';
 
 export async function createNewStudent(reqBody) {

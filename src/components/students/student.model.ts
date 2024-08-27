@@ -1,3 +1,4 @@
+/**student.model.ts */
 import { Schema, model, Document } from 'mongoose';
 import { DEPARTMENT } from '../../components/user/user.enum';
 interface IStudent extends Document {
