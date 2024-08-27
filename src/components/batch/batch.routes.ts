@@ -24,6 +24,11 @@ class BatchRoute {
 			auth,
 			this.batchController.deleteBatch,
 		);
+		this.router.patch(
+			'/batch/:year',
+			auth,
+			this.batchController.updateBatch,
+		);
 	}
 }
 

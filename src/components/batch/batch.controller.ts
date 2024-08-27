@@ -97,6 +97,51 @@ class BatchController {
 			res.status(500).send(e);
 		}
 	}
+	async updateBatch(req, res, next) {
+		try {
+			if (req.user.role !== USER_ROLE.ADMIN) {
+				return res.send({ message: 'Not authorized' });
+			}
+
+			const { year } = req.params;
+			const { branchName, newBranchName, totalStudentsIntake } = req.body;
+
+			if (!year || !branchName) {
+				return res.send({
+					message: 'Year and branchName are required in request',
+				});
+			}
+
+			const batch = await Batch.findOne({ year });
+			if (!batch) {
+				return res
+					.status(404)
+					.send({ message: 'Batch not found for the given year' });
+			}
+
+			const branch = batch.branches.find(
+				(branch) => branch.name === branchName,
+			);
+			if (!branch) {
+				return res
+					.status(404)
+					.send({ message: 'Branch not found in the batch' });
+			}
+
+			if (newBranchName) {
+				branch.name = newBranchName;
+			}
+			if (totalStudentsIntake) {
+				branch.totalStudentsIntake = totalStudentsIntake;
+			}
+
+			await batch.save();
+
+			res.status(200).send(batch);
+		} catch (e) {
+			res.status(500).send(e);
+		}
+	}
 }
 
 export default BatchController;
