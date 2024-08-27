@@ -38,17 +38,27 @@ class AttendanceController {
 		try {
 			const { date } = req.query;
 			const formattedDate = moment(date, 'DD-MM-YYYY').toDate();
+
 			const attendanceRecords = await Attendance.find({
 				date: formattedDate,
 				isAbsent: ISABSENT.ABSENT,
-			});
+			}).select('rollNumber');
+
 			if (!attendanceRecords.length) {
 				return res.send({
 					message: 'No absent students found for this date',
 				});
 			}
 
-			res.status(200).send(attendanceRecords);
+			const rollNumbers = attendanceRecords.map(
+				(record) => record.rollNumber,
+			);
+
+			const students = await Student.find({
+				rollNumber: { $in: rollNumbers },
+			});
+
+			res.status(200).send(students);
 		} catch (e) {
 			res.status(500).send(e);
 		}
