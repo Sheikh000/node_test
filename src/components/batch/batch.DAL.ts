@@ -7,3 +7,10 @@ export async function createNewBatch(reqBody) {
 		return e;
 	}
 }
+export async function deleteBatchByYear(year: number) {
+    try {
+      return await Batch.findOneAndDelete({ year });
+    } catch (e) {
+      return e;
+    }
+  }

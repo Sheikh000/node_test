@@ -1,6 +1,8 @@
 /**batch controller.ts */
 import Batch from './batch.model';
-import { createNewBatch } from './batch.DAL';
+import Student from '../students/student.model'
+import Attendance from '../attendance/attendance.model';
+import { createNewBatch,deleteBatchByYear } from './batch.DAL';
 import { USER_ROLE } from '../user/user.enum';
 class BatchController {
 	async createBatch(req, res, next) {
@@ -59,6 +61,29 @@ class BatchController {
 			res.status(500).send(e);
 		}
 	}
+    async deleteBatch(req, res, next) {
+        try {
+          if (req.user.role !== USER_ROLE.ADMIN) {
+            return res.send({ message: 'Not authorized' });
+          }
+          const { year } = req.params;
+    
+          if (!year) {
+            return res.send({
+              message: 'Year is required',
+            });
+          }
+    
+          const deletedBatch = await deleteBatchByYear(year);
+          if (!deletedBatch) {
+            return res.status(404).send({ message: 'Batch not found for the given year' });
+          }
+          await Student.deleteMany({batch:deletedBatch.year})
+          res.status(200).send({ message: 'Batch deleted successfully' });
+        } catch (e) {
+          res.status(500).send(e);
+        }
+      }
 }
 
 export default BatchController;
