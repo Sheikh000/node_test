@@ -3,6 +3,7 @@ import Attendance from './attendance.model';
 import { addAttendance, getStudentAttendance } from './attendance.DAL';
 import Student from '../students/student.model';
 import * as moment from 'moment';
+import { ISABSENT } from './attendance.enum';
 class AttendanceController {
 	async createAttendance(req, res, next) {
 		try {
@@ -38,7 +39,21 @@ class AttendanceController {
 
 	async getAttendance(req, res, next) {
 		try {
-		} catch (e) {}
+			const { date } = req.query;
+            const formattedDate = moment(date, 'DD-MM-YYYY').startOf('day').toDate();
+            const attendanceRecords = await Attendance.find({
+                date: formattedDate,
+				isAbsent:ISABSENT.ABSENT
+            });
+            if (!attendanceRecords.length) {
+                return res.send({ message: 'No absent students found for this date' });
+            }
+
+            res.status(200).send(attendanceRecords);
+		} catch (e) {
+			res.status(500).send(e);
+
+		}
 	}
 }
 export default AttendanceController;
