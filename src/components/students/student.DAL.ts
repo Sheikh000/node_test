@@ -26,3 +26,15 @@ export async function deleteStudent(studentRollNumber) {
 		return e;
 	}
 }
+
+export async function updateStudent(rollNumber, updateData) {
+	try {
+		return await Student.findOneAndUpdate(
+			{ rollNumber },
+			{ $set: updateData },
+			{ new: true, runValidators: true },
+		);
+	} catch (e) {
+		return e;
+	}
+}

@@ -6,6 +6,7 @@ import {
 	createNewStudent,
 	deleteStudent,
 	getStudentBydetail,
+	updateStudent,
 } from './student.DAL';
 class StudentController {
 	async createStudent(req, res, next) {
@@ -51,6 +52,21 @@ class StudentController {
 		try {
 			const analytics = await getStudentAnalyticsData();
 			res.status(200).send(analytics);
+		} catch (e) {
+			res.status(500).send({ message: e.message });
+		}
+	}
+	async updateStudent(req, res, next) {
+		try {
+			const { rollNumber } = req.params;
+			const updateData = req.body;
+
+			const updatedStudent = await updateStudent(rollNumber, updateData);
+			if (!updatedStudent) {
+				return res.status(404).send({ message: 'Student not found' });
+			}
+
+			res.status(200).send(updatedStudent);
 		} catch (e) {
 			res.status(500).send({ message: e.message });
 		}

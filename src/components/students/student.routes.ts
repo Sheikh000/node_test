@@ -31,6 +31,11 @@ class StudentRoute {
 			auth,
 			this.studentController.getStudentAnalytics,
 		);
+		this.router.patch(
+			'/student/:rollNumber',
+			auth,
+			this.studentController.updateStudent,
+		);
 	}
 }
 
