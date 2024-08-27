@@ -1,6 +1,7 @@
 /**student.controller.ts */
 import User from '../user/user.model';
 import Student from './student.model';
+import { checkSeat } from './student.helper';
 import {
 	createNewStudent,
 	deleteStudent,
@@ -9,10 +10,18 @@ import {
 class StudentController {
 	async createStudent(req, res, next) {
 		try {
+			const { department, batch } = req.body;
+			const isSeatAvailable = await checkSeat(department, batch);
+			if (!isSeatAvailable) {
+				return res.send({
+					message:
+						'No seats available in the selected branch for this batch year',
+				});
+			}
 			const student = await createNewStudent(req.body);
 			res.status(201).send(student);
 		} catch (e) {
-			res.send(e);
+			res.send({message:e.message});
 		}
 	}
 	async getStudents(req, res, next) {
