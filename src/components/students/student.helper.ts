@@ -1,3 +1,4 @@
+/**student helper.ts */
 import Batch from '../batch/batch.model';
 import Student from './student.model';
 export async function checkSeat(
@@ -22,6 +23,50 @@ export async function checkSeat(
 		});
 		return studentCount < branch.totalStudentsIntake;
 	} catch (e) {
-        throw e
-    }
+		throw e;
+	}
+}
+
+export async function getStudentAnalyticsData() {
+	try {
+		const analytics = await Student.aggregate([
+			{
+				$group: {
+					_id: {
+						year: '$batch',
+						branch: '$department',
+					},
+					totalStudents: { $sum: 1 },
+				},
+			},
+			{
+				$group: {
+					_id: '$_id.year',
+					totalStudents: { $sum: '$totalStudents' },
+					branches: {
+						$push: {
+							k: '$_id.branch',
+							v: '$totalStudents',
+						},
+					},
+				},
+			},
+			{
+				$project: {
+					year: '$_id',
+					totalStudents: 1,
+					branches: { $arrayToObject: '$branches' },
+				},
+			},
+			{
+				$sort: { totalStudents: -1 },
+			},
+		]);
+
+		return analytics;
+	} catch (e) {
+		throw new Error(
+			`Error while getting student analytics data: ${e.message}`,
+		);
+	}
 }

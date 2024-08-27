@@ -26,6 +26,11 @@ class StudentRoute {
 			auth,
 			this.studentController.deleteStudent,
 		);
+		this.router.get(
+			'/analytics/students',
+			auth,
+			this.studentController.getStudentAnalytics,
+		);
 	}
 }
 

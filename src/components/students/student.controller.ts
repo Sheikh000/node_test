@@ -1,7 +1,7 @@
 /**student.controller.ts */
 import User from '../user/user.model';
 import Student from './student.model';
-import { checkSeat } from './student.helper';
+import { checkSeat, getStudentAnalyticsData } from './student.helper';
 import {
 	createNewStudent,
 	deleteStudent,
@@ -21,7 +21,7 @@ class StudentController {
 			const student = await createNewStudent(req.body);
 			res.status(201).send(student);
 		} catch (e) {
-			res.send({message:e.message});
+			res.send({ message: e.message });
 		}
 	}
 	async getStudents(req, res, next) {
@@ -45,6 +45,14 @@ class StudentController {
 			res.send(deletedStudent);
 		} catch (e) {
 			res.send(e);
+		}
+	}
+	async getStudentAnalytics(req, res, next) {
+		try {
+			const analytics = await getStudentAnalyticsData();
+			res.status(200).send(analytics);
+		} catch (e) {
+			res.status(500).send({ message: e.message });
 		}
 	}
 }
