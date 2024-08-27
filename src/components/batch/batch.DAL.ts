@@ -8,9 +8,9 @@ export async function createNewBatch(reqBody) {
 	}
 }
 export async function deleteBatchByYear(year: number) {
-    try {
-      return await Batch.findOneAndDelete({ year });
-    } catch (e) {
-      return e;
-    }
-  }
+	try {
+		return await Batch.findOneAndDelete({ year });
+	} catch (e) {
+		return e;
+	}
+}

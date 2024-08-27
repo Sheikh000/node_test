@@ -1,7 +1,7 @@
 /**attendance.routes.ts */
 import { Router } from 'express';
 import AttendanceController from './attendance.controller';
-import auth from '../../utils/auth'
+import auth from '../../utils/auth';
 class AttendanceRoute {
 	public router: Router;
 
@@ -18,8 +18,16 @@ class AttendanceRoute {
 			auth,
 			this.attendanceController.createAttendance,
 		);
-		this.router.get('/absentees',auth, this.attendanceController.getAttendance);
-		this.router.patch('/attendance/:rollNumber', auth,this.attendanceController.updateAttendance);
+		this.router.get(
+			'/absentees',
+			auth,
+			this.attendanceController.getAttendance,
+		);
+		this.router.patch(
+			'/attendance/:rollNumber',
+			auth,
+			this.attendanceController.updateAttendance,
+		);
 	}
 }
 
