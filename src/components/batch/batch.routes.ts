@@ -16,6 +16,8 @@ class BatchRoute {
 	initializeRoutes() {
 		// Route to create a new batch
 		this.router.post('/batch', auth, this.batchController.createBatch);
+		// Route to add a branch to a batch for a specific year
+		this.router.post('/batch/branch', auth, this.batchController.addBranch);
 	}
 }
 
