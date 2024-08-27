@@ -16,7 +16,7 @@ class AttendanceRoute {
 			'/attendance',
 			this.attendanceController.createAttendance,
 		);
-		this.router.get('/absentees',this.attendanceController.getAttendance)
+		this.router.get('/absentees', this.attendanceController.getAttendance);
 	}
 }
 

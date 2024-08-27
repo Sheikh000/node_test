@@ -11,7 +11,7 @@ const attendanceSchema = new Schema<IAttendance>({
 	date: {
 		type: Date,
 		required: true,
-		default: Date.now(),
+		default: () => moment().toDate(),
 	},
 	isAbsent: {
 		type: String,
@@ -24,11 +24,11 @@ const attendanceSchema = new Schema<IAttendance>({
 		required: true,
 	},
 });
-attendanceSchema.pre('save', function (next) {
-	const attendance = this;
-	attendance.date = moment(attendance.date).startOf('day').toDate();
-	next();
-});
+// attendanceSchema.pre('save', function (next) {
+// 	const attendance = this;
+// 	attendance.date = moment(attendance.date).startOf('day').toDate();
+// 	next();
+// });
 
 const Attendance = model<IAttendance>('Attendance', attendanceSchema);
 export default Attendance;
