@@ -1,4 +1,4 @@
-/**user.model.ts */
+/**batch.model.ts */
 import { Schema, model, Document } from 'mongoose';
 import { DEPARTMENT } from '../user/user.enum';
 interface IBranch {
