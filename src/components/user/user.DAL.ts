@@ -26,3 +26,19 @@ export async function deleteUser(userMobileNumber) {
 		return e;
 	}
 }
+
+export async function updateuserDetails(
+	mobileNumber: string,
+	updateDetails: any,
+) {
+	try {
+		const updateUser = await User.findOneAndUpdate(
+			{ mobileNumber },
+			{ $set: updateDetails },
+			{ new: true, runValidators: true },
+		);
+		return updateUser;
+	} catch (e) {
+		return e;
+	}
+}

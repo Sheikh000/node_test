@@ -1,6 +1,10 @@
 /**attendancecontroller.ts */
 import Attendance from './attendance.model';
-import { addAttendance, getStudentAttendance,updateAttendanceRecord } from './attendance.DAL';
+import {
+	addAttendance,
+	getStudentAttendance,
+	updateAttendanceRecord,
+} from './attendance.DAL';
 import Student from '../students/student.model';
 import * as moment from 'moment';
 import { ISABSENT } from './attendance.enum';
@@ -64,27 +68,32 @@ class AttendanceController {
 		}
 	}
 
-    async updateAttendance(req, res, next) {
-        try {
-            const { rollNumber } = req.params;
-            const { date, isAbsent } = req.body;
+	async updateAttendance(req, res, next) {
+		try {
+			const { rollNumber } = req.params;
+			const { date, isAbsent } = req.body;
 			if (!date || !isAbsent) {
 				return res.status(400).send({
-				  message: 'Please provide both date and isAbsent',
+					message: 'Please provide both date and isAbsent',
 				});
-			  }
-            const updatedAttendance = await updateAttendanceRecord(rollNumber, date, isAbsent);
+			}
+			const updatedAttendance = await updateAttendanceRecord(
+				rollNumber,
+				date,
+				isAbsent,
+			);
 
-            if (!updatedAttendance) {
-                return res.status(404).send({
-                    message: 'Attendance record not found for this student on the specified date',
-                });
-            }
+			if (!updatedAttendance) {
+				return res.status(404).send({
+					message:
+						'Attendance record not found for this student on the specified date',
+				});
+			}
 
-            res.status(200).send(updatedAttendance);
-        } catch (e) {
-            res.status(500).send({ message: e.message });
-        }
-    }
+			res.status(200).send(updatedAttendance);
+		} catch (e) {
+			res.status(500).send({ message: e.message });
+		}
+	}
 }
 export default AttendanceController;

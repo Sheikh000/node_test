@@ -1,5 +1,10 @@
 /**user.controller.ts */
-import { CreateNewUser, GetUserByDetails, deleteUser } from './user.DAL';
+import {
+	CreateNewUser,
+	GetUserByDetails,
+	deleteUser,
+	updateuserDetails,
+} from './user.DAL';
 import { generateToken } from '../../utils/auth';
 import User from '../user/user.model';
 import { USER_ROLE } from './user.enum';
@@ -72,6 +77,19 @@ class UserController {
 			req.user.tokens = [];
 			await req.user.save();
 			res.send({ data: 'Succesfully logged out' });
+		} catch (e) {
+			res.send(e);
+		}
+	}
+	async updateUser(req, res, next) {
+		try {
+			const { role } = req.user;
+			const { mobileNumber } = req.params;
+			if (role !== USER_ROLE.ADMIN) {
+				return res.send({ message: 'Not authorized' });
+			}
+			const updatedUser = await updateuserDetails(mobileNumber, req.body);
+			res.send({ data: updatedUser });
 		} catch (e) {
 			res.send(e);
 		}

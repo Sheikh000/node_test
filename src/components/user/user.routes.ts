@@ -32,6 +32,11 @@ class UsersRoute {
 			auth,
 			this.userController.logOutUser,
 		);
+		this.router.patch(
+			'/user/:mobileNumber',
+			auth,
+			this.userController.updateUser,
+		);
 	}
 }
 
